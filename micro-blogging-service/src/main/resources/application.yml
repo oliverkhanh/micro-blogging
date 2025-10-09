@@ -1,0 +1,18 @@
+post:
+  service:
+    url: http://localhost:8081   # URL của post-service
+
+notification:
+  service:
+    url: http://localhost:8082   # URL của notification-service
+
+fanout:
+  service:
+    url: http://localhost:8083   # URL của fanout-service
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000

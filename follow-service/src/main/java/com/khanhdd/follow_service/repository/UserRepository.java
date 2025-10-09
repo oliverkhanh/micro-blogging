@@ -1,24 +1,20 @@
 package com.khanhdd.follow_service.repository;
 
 import com.khanhdd.follow_service.entity.User;
+import jakarta.transaction.Transactional;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import java.util.List;
 
-public interface UserRepository extends Neo4jRepository<User, Long> {
-  @Query("MATCH (a:User), (b:User) " +
-          "WHERE id(a) = $followerId AND id(b) = $followeeId " +
-          "CREATE (a)-[:FOLLOWS {createdAt: datetime()}]->(b)")
-  void createFollow(Long followerId, Long followeeId);
+public interface UserRepository extends Neo4jRepository<User, String> {
+  @Query("MATCH (follower:User)-[r:FOLLOWS]->(followee:User {id: $userId}) RETURN follower")
+  List<User> findFollowersByUserId(String userId);
 
-  @Query("MATCH (a:User)-[f:FOLLOWS]->(b:User) " +
-          "WHERE id(a) = $followerId AND id(b) = $followeeId " +
-          "DELETE f")
-  void deleteFollow(Long followerId, Long followeeId);
+  @Query("MATCH (follower:User)-[:FOLLOWS]->(followee:User {id: $userId}) RETURN count(follower)")
+  long countFollowersByUserId(String userId);
 
-  @Query("MATCH (u:User)-[:FOLLOWS]->(v:User) WHERE id(u) = $id RETURN id(v)")
-  List<Long> getFollowingIds(Long id);
-
-  @Query("MATCH (u:User)<-[:FOLLOWS]-(v:User) WHERE id(u) = $id RETURN id(v)")
-  List<Long> getFollowerIds(Long id);
+  @Transactional
+  @Query(
+      "MATCH (follower:User {id: $followerId})-[r:FOLLOWS]->(followee:User {id: $followeeId}) DELETE r")
+  void deleteFollowRelationship(String followerId, String followeeId);
 }

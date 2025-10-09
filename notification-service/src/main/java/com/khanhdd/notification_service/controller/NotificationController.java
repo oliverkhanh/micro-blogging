@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/notification")
 public class NotificationController {
   @PostMapping
-  public ResponseEntity<Void> createUser(@RequestBody FeedItem request) {
+  public ResponseEntity<Void> sendNotification(@RequestBody FeedItem request) {
     System.out.println(
         "Send notification to user : "
             + request.getAuthorId()
