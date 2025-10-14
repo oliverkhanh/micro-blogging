@@ -1,0 +1,3 @@
+follow:
+  service:
+    url: http://localhost:8084   # URL của fanout-service

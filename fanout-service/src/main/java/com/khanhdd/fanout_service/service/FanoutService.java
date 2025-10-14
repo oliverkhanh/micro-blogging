@@ -4,25 +4,32 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.khanhdd.common_service.dto.FollowPost;
 import com.khanhdd.common_service.dto.FeedItem;
+import com.khanhdd.fanout_service.dto.User;
 import com.khanhdd.fanout_service.kafka.KafkaProducer;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class FanoutService {
   private final KafkaProducer producer;
   private final ObjectMapper objectMapper;
+  private final FollowService followService;
 
-  public FanoutService(KafkaProducer producer, ObjectMapper objectMapper) {
+  public FanoutService(
+      KafkaProducer producer, ObjectMapper objectMapper, FollowService followService) {
     this.producer = producer;
     this.objectMapper = objectMapper;
+    this.followService = followService;
   }
 
   public void fanout(FeedItem feedItem) {
-    if (!isFanoutOnWrite()) {
+    if (!isFanoutOnWrite(feedItem.getAuthorId())) {
       return;
     }
     // get follower ids
+    List<User> followers = followService.getFollowers(feedItem.getAuthorId());
 
     // get follower data: filter follower, blacklist
 
@@ -48,7 +55,9 @@ public class FanoutService {
     }
   }
 
-  private boolean isFanoutOnWrite() {
-    return true;
+  private boolean isFanoutOnWrite(Long authorId) {
+    // If user has more than 5 followers => celebrity
+    Long followersCount = followService.getFollowerCount(authorId);
+    return followersCount > 5;
   }
 }

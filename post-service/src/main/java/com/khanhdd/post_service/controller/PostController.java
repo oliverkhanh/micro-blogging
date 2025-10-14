@@ -1,5 +1,7 @@
 package com.khanhdd.post_service.controller;
 
+import com.khanhdd.common_service.dto.request.CreatePostDto;
+import com.khanhdd.common_service.dto.request.PostResponse;
 import com.khanhdd.post_service.entity.Post;
 import com.khanhdd.post_service.service.PostService;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +30,7 @@ public class PostController {
   }
 
   @PostMapping
-  public Post create(@RequestBody Post post) {
+  public PostResponse create(@RequestBody CreatePostDto post) {
     return service.create(post);
   }
 

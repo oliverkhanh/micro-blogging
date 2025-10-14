@@ -21,7 +21,7 @@ public class FollowService {
 
   @Transactional
   @CachePut(value = "followersCache", key = "#followeeId")
-  public List<User> followUser(String followerId, String followeeId) {
+  public List<User> followUser(Long followerId, Long followeeId) {
     User follower = userRepository.findById(followerId).orElseGet(() -> new User(followerId));
     User followee = userRepository.findById(followeeId).orElseGet(() -> new User(followeeId));
     Follow follow = new Follow(followee, LocalDateTime.now());
@@ -33,18 +33,19 @@ public class FollowService {
 
   @Transactional
   @CachePut(value = "followersCache", key = "#followeeId")
-  public List<User> unfollowUser(String followerId, String followeeId) {
+  public List<User> unfollowUser(Long followerId, Long followeeId) {
     userRepository.deleteFollowRelationship(followerId, followeeId);
 
     return userRepository.findFollowersByUserId(followeeId);
   }
 
   @Cacheable(value = "followersCache", key = "#userId")
-  public List<User> getFollowers(String userId) {
+  public List<User> getFollowers(Long userId) {
     return userRepository.findFollowersByUserId(userId);
   }
 
-  public long getFollowersCount(String userId) {
+  @Cacheable(value = "followersCountCache", key = "#userId")
+  public long getFollowersCount(Long userId) {
     return userRepository.countFollowersByUserId(userId);
   }
 }

@@ -13,14 +13,14 @@ import java.util.Set;
 @Node("User")
 @JsonIgnoreProperties({"followees"})
 public class User {
-  @Id private String id;
+  @Id private Long id;
 
   @Relationship(type = "FOLLOWS", direction = Relationship.Direction.OUTGOING)
   private Set<Follow> followees = new HashSet<>();
 
   public User() {}
 
-  public User(String id) {
+  public User(Long id) {
     this.id = id;
   }
 }

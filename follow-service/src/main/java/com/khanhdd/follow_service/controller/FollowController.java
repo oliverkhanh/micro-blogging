@@ -2,8 +2,10 @@ package com.khanhdd.follow_service.controller;
 
 import java.util.List;
 
+import com.khanhdd.common_service.dto.ApiResponse;
 import com.khanhdd.follow_service.entity.User;
 import com.khanhdd.follow_service.service.FollowService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,22 +18,25 @@ public class FollowController {
   }
 
   @PostMapping
-  public void follow(@RequestParam String followerId, @RequestParam String followeeId) {
+  public ResponseEntity<Void> follow(@RequestParam Long followerId, @RequestParam Long followeeId) {
     followService.followUser(followerId, followeeId);
+    return ResponseEntity.noContent().build();
   }
 
   @PostMapping("/unfollow")
-  public void unfollow(@RequestParam String followerId, @RequestParam String followeeId) {
+  public ResponseEntity<Void> unfollow(
+      @RequestParam Long followerId, @RequestParam Long followeeId) {
     followService.unfollowUser(followerId, followeeId);
+    return ResponseEntity.noContent().build();
   }
 
   @GetMapping("/followers")
-  public List<User> getFollowers(@RequestParam String userId) {
-    return followService.getFollowers(userId);
+  public ApiResponse<List<User>> getFollowers(@RequestParam Long userId) {
+    return ApiResponse.success(followService.getFollowers(userId));
   }
 
   @GetMapping("/followers/count")
-  public long getFollowersCount(@RequestParam String userId) {
-    return followService.getFollowersCount(userId);
+  public ApiResponse<Long> getFollowersCount(@RequestParam Long userId) {
+    return ApiResponse.success(followService.getFollowersCount(userId));
   }
 }

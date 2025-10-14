@@ -16,6 +16,7 @@ public class NotificationService {
 
     @Async
     public void callApiToNotificationService(PostResponse postResponse) {
+        System.out.println("Notification thread: " + Thread.currentThread().getName());
         FeedItem feedItem = toFeedItem(postResponse);
 
         notificationClient.sendNotification(feedItem);

@@ -2,7 +2,6 @@ package com.khanhdd.micro_blogging_service.service;
 
 import com.khanhdd.common_service.dto.request.CreatePostDto;
 import com.khanhdd.common_service.dto.request.PostResponse;
-import com.khanhdd.micro_blogging_service.feign_client.FanoutServiceClient;
 import com.khanhdd.micro_blogging_service.feign_client.PostServiceClient;
 import feign.FeignException;
 import org.apache.kafka.common.errors.ApiException;
