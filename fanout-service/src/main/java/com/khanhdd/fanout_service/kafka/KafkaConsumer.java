@@ -35,7 +35,7 @@ public class KafkaConsumer {
   }
 
   private void addPostToNewsfeed(FollowPost followPost) {
-    String key = "newsfeed:" + followPost.getFollowerId();
+    String key = "newsfeed::" + followPost.getFollowerId();
     try {
       FeedItem feedItem = new FeedItem();
       feedItem.setPostId(followPost.getPostId());

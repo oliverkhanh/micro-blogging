@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@FeignClient(name = "followService", url = "${fanout.service.url}")
+@FeignClient(name = "followService", url = "${follow.service.url}")
 public interface FollowServiceClient {
   @GetMapping("/api/follow/followers")
   ApiResponse<List<User>> getFollowers(@RequestParam("userId") Long userId);

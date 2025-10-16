@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FanoutService {
@@ -31,11 +32,11 @@ public class FanoutService {
     // get follower ids
     List<User> followers = followService.getFollowers(feedItem.getAuthorId());
 
+    // TODO
     // get follower data: filter follower, blacklist
 
     // Result is follower id list
-    List<Long> followerIds = new ArrayList<>();
-    followerIds.add(2L);
+    List<Long> followerIds = followers.stream().map(User::getId).collect(Collectors.toList());
     // publish to message queue
     for (Long followerId : followerIds) {
       try {
@@ -57,7 +58,8 @@ public class FanoutService {
 
   private boolean isFanoutOnWrite(Long authorId) {
     // If user has more than 5 followers => celebrity
-    Long followersCount = followService.getFollowerCount(authorId);
-    return followersCount > 5;
+//    Long followersCount = followService.getFollowerCount(authorId);
+//    return followersCount > 5;
+    return true;
   }
 }
